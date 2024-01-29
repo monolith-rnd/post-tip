@@ -134,9 +134,11 @@ class ToolTipShape extends ShapeBorder {
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
     final radius = borderRadius != null ? borderRadius! : 0.0;
     final r = BorderRadius.all(Radius.circular(radius));
-    final RRect region = r.resolve(textDirection).toRRect(rect.inflate(borderWidth));
+    final RRect region =
+        r.resolve(textDirection).toRRect(rect.inflate(borderWidth));
 
-    return _computeBubbleArea(region, radius, position, arrowWidth, arrowHeight);
+    return _computeBubbleArea(
+        region, radius, position, arrowWidth, arrowHeight);
   }
 
   @override
@@ -195,8 +197,10 @@ class ToolTipShape extends ShapeBorder {
     );
 
     if (borderWidth > 0.0) {
-      final outerArea = _computeBubbleArea(rect, radius, position, arrowWidth, arrowHeight);
-      final borderArea = Path.combine(PathOperation.difference, outerArea, innerArea);
+      final outerArea =
+          _computeBubbleArea(rect, radius, position, arrowWidth, arrowHeight);
+      final borderArea =
+          Path.combine(PathOperation.difference, outerArea, innerArea);
       canvas.drawPath(borderArea, borderPainter);
     }
     canvas.drawPath(innerArea, contentPainter);
@@ -274,7 +278,8 @@ class ToolTipShape extends ShapeBorder {
 
   ///-- top side --
   /// starting point
-  void _addArrowCornerAtLeftOfTopSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtLeftOfTopSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final left = bound.left;
     final top = bound.top;
 
@@ -284,7 +289,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(left + arrowWidth, top);
   }
 
-  void _addArrowAtTopCenter(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowAtTopCenter(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final top = bound.top;
     final center = bound.center;
 
@@ -297,7 +303,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(center.dx + halfArrowWidth, top);
   }
 
-  void _addArrowCornerAtRightOfTopSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtRightOfTopSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final top = bound.top;
     final right = bound.right;
 
@@ -316,7 +323,8 @@ class ToolTipShape extends ShapeBorder {
 
     // top right round corner
     path.arcTo(
-      Rect.fromCircle(center: Offset(right - radius, top + radius), radius: radius),
+      Rect.fromCircle(
+          center: Offset(right - radius, top + radius), radius: radius),
       radians(-90),
       radians(90),
       false,
@@ -324,7 +332,8 @@ class ToolTipShape extends ShapeBorder {
   }
 
   ///-- right side --
-  void _addArrowCornerAtTopOfRightSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtTopOfRightSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final top = bound.top;
     final right = bound.right;
 
@@ -332,7 +341,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(right, top + arrowWidth);
   }
 
-  void _addArrowAtRightCenter(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowAtRightCenter(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final right = bound.right;
     final center = bound.center;
     final halfArrowWidth = arrowWidth * 0.5;
@@ -345,7 +355,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(right, center.dy + halfArrowWidth);
   }
 
-  void _addArrowCornerAtBottomOfRightSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtBottomOfRightSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final right = bound.right;
     final bottom = bound.bottom;
 
@@ -363,7 +374,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(right, bottom - radius);
 
     path.arcTo(
-      Rect.fromCircle(center: Offset(right - radius, bottom - radius), radius: radius),
+      Rect.fromCircle(
+          center: Offset(right - radius, bottom - radius), radius: radius),
       radians(0),
       radians(90),
       false,
@@ -372,7 +384,8 @@ class ToolTipShape extends ShapeBorder {
 
   ///-- bottom side --
 
-  void _addArrowCornerAtRightOfBottomSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtRightOfBottomSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final right = bound.right;
     final bottom = bound.bottom;
 
@@ -380,7 +393,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(right - arrowWidth, bottom);
   }
 
-  void _addArrowAtBottomCenter(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowAtBottomCenter(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final bottom = bound.bottom;
     final center = bound.center;
 
@@ -394,7 +408,8 @@ class ToolTipShape extends ShapeBorder {
   }
 
   /// [radiusWeight] weight for the edge of the arrow in the bottom left corner, ranged from 0 to 1 double value [0~1]
-  void _addArrowCornerAtLeftOfBottomSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtLeftOfBottomSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final left = bound.left;
     final bottom = bound.bottom;
 
@@ -413,7 +428,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(left + radius, bottom);
 
     path.arcTo(
-      Rect.fromCircle(center: Offset(left + radius, bottom - radius), radius: radius),
+      Rect.fromCircle(
+          center: Offset(left + radius, bottom - radius), radius: radius),
       radians(90),
       radians(90),
       false,
@@ -422,7 +438,8 @@ class ToolTipShape extends ShapeBorder {
 
   ///-- left side --
   /// starting point
-  void _addArrowCornerAtTopOfLeftSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtTopOfLeftSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final left = bound.left;
     final top = bound.top;
 
@@ -432,7 +449,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(left, top);
   }
 
-  void _addArrowAtLeftCenter(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowAtLeftCenter(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final left = bound.left;
     final center = bound.center;
     final halfArrowWidth = arrowWidth * 0.5;
@@ -445,7 +463,8 @@ class ToolTipShape extends ShapeBorder {
     path.lineTo(left, center.dy - halfArrowWidth);
   }
 
-  void _addArrowCornerAtBottomOfLeftSide(RRect bound, Path path, double arrowWidth, double arrowHeight) {
+  void _addArrowCornerAtBottomOfLeftSide(
+      RRect bound, Path path, double arrowWidth, double arrowHeight) {
     final left = bound.left;
     final bottom = bound.bottom;
 
@@ -461,7 +480,8 @@ class ToolTipShape extends ShapeBorder {
     path.moveTo(left, top + radius);
 
     path.arcTo(
-      Rect.fromCircle(center: Offset(left + radius, top + radius), radius: radius),
+      Rect.fromCircle(
+          center: Offset(left + radius, top + radius), radius: radius),
       radians(180),
       radians(90),
       false,

@@ -1,5 +1,5 @@
 name: post_tip
-description: "A Flutter ToolTip widget"
+description: "A PostTip widget helps you easily build ToolTip widget around a target widget using CompositedTransformTarget and CompositedTransformFollower"
 version: 0.0.1
 homepage: https://github.com/monolith-rnd/post-tip
 

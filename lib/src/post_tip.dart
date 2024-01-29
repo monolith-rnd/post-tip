@@ -216,7 +216,8 @@ class _PostTipState extends State<PostTip> {
 
                           _offset = offset;
                           _isToolTipRendered = true;
-                          _isToolTipVisible = _controller.value == PostTipStatus.shown;
+                          _isToolTipVisible =
+                              _controller.value == PostTipStatus.shown;
                           _opacity = _isToolTipVisible ? 1 : 0;
 
                           /// it is inevitable to render the overlay forcefully, because ToolTip's location is
@@ -227,7 +228,9 @@ class _PostTipState extends State<PostTip> {
                         }
                       },
                       child: Container(
-                        constraints: widget.keepContentInScreen ? BoxConstraints(maxWidth: space) : null,
+                        constraints: widget.keepContentInScreen
+                            ? BoxConstraints(maxWidth: space)
+                            : null,
                         child: widget.content,
                       ),
                     ),
@@ -286,7 +289,8 @@ class _PostTipState extends State<PostTip> {
     }
 
     final screenSize = MediaQuery.of(context).size;
-    final Size targetSize = box.getDryLayout(const BoxConstraints.tightForFinite());
+    final Size targetSize =
+        box.getDryLayout(const BoxConstraints.tightForFinite());
     final space = _getHorizontalSpace(
       position: position,
       screenWidth: screenSize.width,
@@ -312,10 +316,12 @@ class _PostTipState extends State<PostTip> {
   }) {
     switch (position) {
       case PostTipPosition.topStart:
-        return Offset(0, -(followerSize.height + borderWidth * 2 + arrowHeight + distance));
+        return Offset(0,
+            -(followerSize.height + borderWidth * 2 + arrowHeight + distance));
       case PostTipPosition.topCenter:
         return Offset(
-          -((followerSize.width * 0.5 + borderWidth) - (targetSize.width * 0.5)),
+          -((followerSize.width * 0.5 + borderWidth) -
+              (targetSize.width * 0.5)),
           -(followerSize.height + borderWidth * 2 + arrowHeight + distance),
         );
       case PostTipPosition.topEnd:
@@ -329,7 +335,8 @@ class _PostTipState extends State<PostTip> {
       case PostTipPosition.rightCenter:
         return Offset(
           targetSize.width + distance,
-          -(followerSize.height * 0.5 + borderWidth) + (targetSize.height * 0.5),
+          -(followerSize.height * 0.5 + borderWidth) +
+              (targetSize.height * 0.5),
         );
       case PostTipPosition.rightEnd:
         return Offset(
@@ -341,7 +348,8 @@ class _PostTipState extends State<PostTip> {
         return Offset(0, targetSize.height + distance);
       case PostTipPosition.bottomCenter:
         return Offset(
-          -((followerSize.width * 0.5 + borderWidth) - (targetSize.width * 0.5)),
+          -((followerSize.width * 0.5 + borderWidth) -
+              (targetSize.width * 0.5)),
           targetSize.height + distance,
         );
       case PostTipPosition.bottomEnd:
@@ -351,11 +359,14 @@ class _PostTipState extends State<PostTip> {
         );
 
       case PostTipPosition.leftStart:
-        return Offset(-(followerSize.width + borderWidth * 2 + arrowHeight + distance), 0);
+        return Offset(
+            -(followerSize.width + borderWidth * 2 + arrowHeight + distance),
+            0);
       case PostTipPosition.leftCenter:
         return Offset(
           -(followerSize.width + borderWidth * 2 + arrowHeight + distance),
-          -(followerSize.height * 0.5 + borderWidth) + (targetSize.height * 0.5),
+          -(followerSize.height * 0.5 + borderWidth) +
+              (targetSize.height * 0.5),
         );
       case PostTipPosition.leftEnd:
         return Offset(
@@ -379,26 +390,30 @@ class _PostTipState extends State<PostTip> {
     switch (position) {
       case PostTipPosition.topStart:
       case PostTipPosition.bottomStart:
-        final target = targetBox.localToGlobal(targetBox.size.topLeft(Offset.zero));
+        final target =
+            targetBox.localToGlobal(targetBox.size.topLeft(Offset.zero));
         return screenWidth - target.dx - borderWidth * 2;
       case PostTipPosition.bottomCenter:
       case PostTipPosition.topCenter:
         return screenWidth;
       case PostTipPosition.bottomEnd:
       case PostTipPosition.topEnd:
-        final target = targetBox.localToGlobal(targetBox.size.topRight(Offset.zero));
+        final target =
+            targetBox.localToGlobal(targetBox.size.topRight(Offset.zero));
         return target.dx - borderWidth * 2;
 
       case PostTipPosition.rightStart:
       case PostTipPosition.rightCenter:
       case PostTipPosition.rightEnd:
-        final target = targetBox.localToGlobal(targetBox.size.topRight(Offset.zero));
+        final target =
+            targetBox.localToGlobal(targetBox.size.topRight(Offset.zero));
         return screenWidth - target.dx - spaceMargin;
 
       case PostTipPosition.leftStart:
       case PostTipPosition.leftCenter:
       case PostTipPosition.leftEnd:
-        final target = targetBox.localToGlobal(targetBox.size.topLeft(Offset.zero));
+        final target =
+            targetBox.localToGlobal(targetBox.size.topLeft(Offset.zero));
         return target.dx - spaceMargin;
     }
   }
