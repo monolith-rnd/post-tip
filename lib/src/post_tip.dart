@@ -162,13 +162,15 @@ class _PostTipState extends State<PostTip> {
     }
 
     // calculate space to horizontal boundary(either left or right side of screen)
-    final (space, targetSize) = _calculateSpaceToBoundary(
+    final bubbleSpace = _calculateSpaceToBoundary(
       context: context,
       position: widget.position,
       arrowHeight: widget.arrowHeight,
       borderWidth: widget.borderWidth,
       distance: widget.distance,
     );
+    final space = bubbleSpace.space;
+    final targetSize = bubbleSpace.size;
 
     _overlayEntry = OverlayEntry(builder: (BuildContext context) {
       return CompositedTransformFollower(
@@ -271,7 +273,7 @@ class _PostTipState extends State<PostTip> {
   /// calculate space to horizontal boundary(either left or right side of screen) and the target size.
   /// Target will be decided by the context.
   /// [context] is the context of the widget that is going to calculate the size of space
-  (double, Size) _calculateSpaceToBoundary({
+  BubbleSpace _calculateSpaceToBoundary({
     required BuildContext context,
     required PostTipPosition position,
     required double arrowHeight,
@@ -294,7 +296,8 @@ class _PostTipState extends State<PostTip> {
       extraHorizontalSpace: distance,
     );
 
-    return (space, targetSize);
+    return BubbleSpace(space: space, size: targetSize);
+    // return (space, targetSize);
   }
 
   /// calculate the offset of tooltip relative to the top left point of the target
@@ -406,10 +409,10 @@ class MeasureWidgetSize extends SingleChildRenderObjectWidget {
   final OnWidgetSizeChange onSizeChange;
 
   const MeasureWidgetSize({
-    Key? key,
+    super.key,
     required this.onSizeChange,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required Widget super.child,
+  });
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -437,4 +440,11 @@ class MeasureWidgetSizeRenderObject extends RenderProxyBox {
       onSizeChange(newSize);
     });
   }
+}
+
+class BubbleSpace {
+  final double space;
+  final Size size;
+
+  BubbleSpace({required this.space, required this.size});
 }

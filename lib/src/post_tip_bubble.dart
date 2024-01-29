@@ -32,10 +32,9 @@ class PostTipBubble extends StatelessWidget {
     this.arrowWidth = 16.0,
     this.arrowHeight = 10.0,
     this.child,
-    Key? key,
+    super.key,
   })  : assert(borderWidth >= 0),
-        assert((borderRadius == null) || (borderRadius >= 0)),
-        super(key: key);
+        assert((borderRadius == null) || (borderRadius >= 0));
 
   final double borderWidth;
   final double? borderRadius;
