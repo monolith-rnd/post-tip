@@ -1,16 +1,38 @@
-# example
-
-An example of PostTip package
-
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```dart
+void main() => runApp(const ExampleApp());
 
-A few resources to get you started if this is your first Flutter project:
+class ExampleApp extends StatelessWidget {
+  const ExampleApp({super.key});
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'PostTip Demo',
+      home: Scaffold(
+        body: Center(
+          child: PostTip(
+            position: PostTipPosition.topStart,
+            distance: 4,
+            backgroundColor: Colors.lightBlue,
+            content: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              child: Text('PostTip'),
+            ),
+            child: Container(
+              color: Colors.yellow,
+              padding: const EdgeInsets.all(8),
+              child: const Icon(
+                Icons.favorite,
+                color: Colors.pink,
+                size: 64.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```

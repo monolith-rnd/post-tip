@@ -16,6 +16,7 @@ class ExampleApp extends StatelessWidget {
 
       /// PostTip around a single item.
       home: const PostTipPage(),
+
       /// PostTip in a ScrollView
       // home: const PostTipScrollPage(),
     );
