@@ -9,13 +9,11 @@ class PostTipController extends ValueNotifier<PostTipStatus> {
   ShowPostTipCallback? showTip;
   HidePostTipCallback? hideTip;
 
-  PostTipController({PostTipStatus? value})
-      : super(value ?? PostTipStatus.shown) {
+  PostTipController({PostTipStatus? value}) : super(value ?? PostTipStatus.shown) {
     showTip = null;
     hideTip = null;
   }
 
-  @mustCallSuper
   void attach({ShowPostTipCallback? showTip, HidePostTipCallback? hideTip}) {
     this.showTip = showTip;
     this.hideTip = hideTip;
