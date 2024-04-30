@@ -1,6 +1,6 @@
 name: post_tip
 description: "A PostTip widget helps you easily build ToolTip widget around a target widget using CompositedTransformTarget and CompositedTransformFollower"
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/monolith-rnd/post-tip
 
 environment:

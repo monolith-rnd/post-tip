@@ -47,12 +47,20 @@ class PostTipPage extends StatefulWidget {
 
 class _PostTipPageState extends State<PostTipPage> {
   int _index = 0;
+  final controller = PostTipController(value: PostTipStatus.hidden);
+
+  @override
+  void initState() {
+    super.initState();
+    controller.show();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: PostTip(
+          controller: controller,
           position: positions[_index],
           distance: 4,
           backgroundColor: Colors.lightBlue,
@@ -60,13 +68,32 @@ class _PostTipPageState extends State<PostTipPage> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: Text('PostTip'),
           ),
-          child: Container(
-            color: Colors.yellow,
-            padding: const EdgeInsets.all(8),
-            child: const Icon(
-              Icons.favorite,
-              color: Colors.pink,
-              size: 64.0,
+          child: GestureDetector(
+            onTap: () {
+              showGeneralDialog(
+                context: context,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return AlertDialog(
+                    title: const Text('ToolTip'),
+                    content: const Text('ToolTip above dialog'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Container(
+              color: Colors.yellow,
+              padding: const EdgeInsets.all(8),
+              child: const Icon(
+                Icons.favorite,
+                color: Colors.pink,
+                size: 64.0,
+              ),
             ),
           ),
         ),

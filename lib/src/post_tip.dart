@@ -150,9 +150,13 @@ class _PostTipState extends State<PostTip> {
 
   Future<void> _showTip() async {
     if (_overlayEntry == null) {
-      _addTip();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _addTip();
+      });
     } else if (_isToolTipRendered) {
-      _overlayEntry?.markNeedsBuild();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _overlayEntry?.markNeedsBuild();
+      });
     }
   }
 
@@ -250,7 +254,9 @@ class _PostTipState extends State<PostTip> {
     if (_isToolTipRendered && _isToolTipVisible) {
       _opacity = 0.0;
       _isToolTipVisible = false;
-      _overlayEntry?.markNeedsBuild();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _overlayEntry?.markNeedsBuild();
+      });
     }
   }
 
