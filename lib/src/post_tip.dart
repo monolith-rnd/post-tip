@@ -42,8 +42,10 @@ class PostTip extends StatefulWidget {
     this.arrowHeight = 5.0,
     this.distance = 0.0,
     this.keepContentInScreen = true,
+    this.onTapOutside,
     this.child,
     required this.content,
+    this.childOffset = Offset.zero,
     super.key,
   });
 
@@ -83,7 +85,12 @@ class PostTip extends StatefulWidget {
   /// the CompositedTransformTarget widget(child)
   final Widget content;
 
+  /// offset of content widget from the target widget
+  final Offset childOffset;
+
   final PostTipController? controller;
+
+  final Function()? onTapOutside;
 
   @override
   State<PostTip> createState() => _PostTipState();
@@ -108,13 +115,19 @@ class _PostTipState extends State<PostTip> {
   /// visibility flag that will determine the status of tooltip for [PostTip]
   bool _isToolTipVisible = false;
 
+  final GlobalKey _toolTipTargetKey = GlobalKey();
+  final GlobalKey _toolTipBubbleKey = GlobalKey();
+
   @override
   void initState() {
     _controller = widget.controller ?? PostTipController();
     _attachController(_controller);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _addTip();
+      if (_controller.isShown) {
+        _showTip();
+      }
+      // _addTip();
     });
     super.initState();
   }
@@ -139,6 +152,7 @@ class _PostTipState extends State<PostTip> {
   @override
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
+      key: _toolTipTargetKey,
       link: _layerLink,
       child: widget.child,
     );
@@ -177,68 +191,82 @@ class _PostTipState extends State<PostTip> {
     final targetSize = bubbleSpace.size;
 
     final overlayEntry = OverlayEntry(builder: (BuildContext context) {
-      return CompositedTransformFollower(
-        showWhenUnlinked: false,
-        link: _layerLink,
-        offset: _offset,
-        child: Material(
-          type: MaterialType.transparency,
-          child: Stack(
-            children: [
-              Positioned(
-                child: AnimatedOpacity(
-                  opacity: _opacity,
-                  duration: const Duration(milliseconds: 350),
-                  curve: Curves.easeInOut,
-                  onEnd: () {
-                    // remove tooltip from the overlay when the animation finished.
-                    if (!_isToolTipVisible) {
-                      _removeTip();
-                    }
-                  },
-                  child: PostTipBubble(
-                    position: widget.position,
-                    borderWidth: widget.borderWidth,
-                    borderRadius: widget.borderRadius,
-                    borderColor: widget.borderColor,
-                    backgroundColor: widget.backgroundColor,
-                    arrowWidth: widget.arrowWidth,
-                    arrowHeight: widget.arrowHeight,
-                    shadows: widget.shadows,
-                    child: MeasureWidgetSize(
-                      onSizeChange: (Size? size) {
-                        // size of follower widget
-                        if (size != null) {
-                          final offset = _calculateOffsetByPosition(
-                            position: widget.position,
-                            targetSize: targetSize,
-                            followerSize: size,
-                            arrowHeight: widget.arrowHeight,
-                            borderWidth: widget.borderWidth,
-                            distance: widget.distance,
-                          );
+      return Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (PointerDownEvent event) {
+          // handle tap outside the tooltip
+          final RenderBox box = _toolTipTargetKey.currentContext?.findRenderObject() as RenderBox;
+          final Offset localPosition = box.globalToLocal(event.localPosition);
 
-                          _offset = offset;
-                          _isToolTipRendered = true;
-                          _isToolTipVisible = _controller.value == PostTipStatus.shown;
-                          _opacity = _isToolTipVisible ? 1 : 0;
+          if (!box.paintBounds.contains(localPosition)) {
+            // Handle touch outside the tooltip
+            widget.onTapOutside?.call();
+          }
+        },
+        child: CompositedTransformFollower(
+          showWhenUnlinked: false,
+          link: _layerLink,
+          offset: _offset + widget.childOffset,
+          child: Material(
+            type: MaterialType.transparency,
+            child: Stack(
+              children: [
+                Positioned(
+                  child: AnimatedOpacity(
+                    opacity: _opacity,
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeInOut,
+                    onEnd: () {
+                      // remove tooltip from the overlay when the animation finished.
+                      if (!_isToolTipVisible) {
+                        _removeTip();
+                      }
+                    },
+                    child: PostTipBubble(
+                      key: _toolTipBubbleKey,
+                      position: widget.position,
+                      borderWidth: widget.borderWidth,
+                      borderRadius: widget.borderRadius,
+                      borderColor: widget.borderColor,
+                      backgroundColor: widget.backgroundColor,
+                      arrowWidth: widget.arrowWidth,
+                      arrowHeight: widget.arrowHeight,
+                      shadows: widget.shadows,
+                      child: MeasureWidgetSize(
+                        onSizeChange: (Size? size) {
+                          // size of follower widget
+                          if (size != null) {
+                            final offset = _calculateOffsetByPosition(
+                              position: widget.position,
+                              targetSize: targetSize,
+                              followerSize: size,
+                              arrowHeight: widget.arrowHeight,
+                              borderWidth: widget.borderWidth,
+                              distance: widget.distance,
+                            );
 
-                          /// it is inevitable to render the overlay forcefully, because ToolTip's location is
-                          /// determined after the first widget is first rendered to get the size of it.
-                          /// and the overlay is not a part of build method which the widget does re-rendered it
-                          /// by setState()
-                          _overlayEntry?.markNeedsBuild();
-                        }
-                      },
-                      child: Container(
-                        constraints: widget.keepContentInScreen ? BoxConstraints(maxWidth: space) : null,
-                        child: widget.content,
+                            _offset = offset;
+                            _isToolTipRendered = true;
+                            _isToolTipVisible = _controller.value == PostTipStatus.shown;
+                            _opacity = _isToolTipVisible ? 1 : 0;
+
+                            /// it is inevitable to render the overlay forcefully, because ToolTip's location is
+                            /// determined after the first widget is first rendered to get the size of it.
+                            /// and the overlay is not a part of build method which the widget does re-rendered it
+                            /// by setState()
+                            _overlayEntry?.markNeedsBuild();
+                          }
+                        },
+                        child: Container(
+                          constraints: widget.keepContentInScreen ? BoxConstraints(maxWidth: space) : null,
+                          child: widget.content,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

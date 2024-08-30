@@ -1,7 +1,8 @@
 name: post_tip
 description: "A PostTip widget helps you easily build ToolTip widget around a target widget using CompositedTransformTarget and CompositedTransformFollower"
-version: 0.0.4
-homepage: https://github.com/monolith-rnd/post-tip
+version: 0.0.6
+homepage: https://github.com/monolith-rnd/981park-flutter-app/packages/post_tip
+publish_to: none
 
 environment:
   sdk: '>=2.17.0 <4.0.0'

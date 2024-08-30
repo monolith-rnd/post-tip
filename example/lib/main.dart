@@ -58,45 +58,62 @@ class _PostTipPageState extends State<PostTipPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: PostTip(
-          controller: controller,
-          position: positions[_index],
-          distance: 4,
-          backgroundColor: Colors.lightBlue,
-          content: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            child: Text('PostTip'),
-          ),
-          child: GestureDetector(
-            onTap: () {
-              showGeneralDialog(
-                context: context,
-                pageBuilder: (context, animation, secondaryAnimation) {
-                  return AlertDialog(
-                    title: const Text('ToolTip'),
-                    content: const Text('ToolTip above dialog'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        child: const Text('OK'),
-                      ),
-                    ],
+      body: Stack(
+        children: [
+          Center(
+            child: PostTip(
+              controller: controller,
+              position: positions[_index],
+              distance: 4,
+              backgroundColor: Colors.lightBlue,
+              content: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                child: Text('PostTip'),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return AlertDialog(
+                        title: const Text('ToolTip'),
+                        content: const Text('ToolTip above dialog'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
-              );
-            },
-            child: Container(
-              color: Colors.yellow,
-              padding: const EdgeInsets.all(8),
-              child: const Icon(
-                Icons.favorite,
-                color: Colors.pink,
-                size: 64.0,
+                child: Container(
+                  color: Colors.yellow,
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(
+                    Icons.favorite,
+                    color: Colors.pink,
+                    size: 64.0,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+          Positioned(
+            bottom: 10,
+            child: ElevatedButton(
+              onPressed: () {
+                if (controller.isShown) {
+                  controller.hide();
+                } else {
+                  controller.show();
+                }
+              },
+              child: Text('show and hide'),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _updatePostTipPosition,

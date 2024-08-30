@@ -22,15 +22,27 @@ class PostTipController extends ValueNotifier<PostTipStatus> {
   bool get isShown => value == PostTipStatus.shown;
 
   Future<void> show() async {
+    if (value == PostTipStatus.shown) return;
+
     value = PostTipStatus.shown;
     await showTip?.call();
     notifyListeners();
   }
 
   Future<void> hide() async {
+    if (value == PostTipStatus.hidden) return;
+
     value = PostTipStatus.hidden;
     await hideTip?.call();
     notifyListeners();
+  }
+
+  Future<void> toggle() async {
+    if (isShown) {
+      await hide();
+    } else {
+      await show();
+    }
   }
 
   void notify(PostTipStatus status) {
