@@ -159,19 +159,20 @@ class _PostTipState extends State<PostTip> {
   }
 
   void _attachController(PostTipController controller) {
-    _controller.attach(showTip: _showTip, hideTip: _hideTip);
+    _controller.attach(showTip: _showTip, hideTip: _hideTip, isShown: _isToolTipShown);
   }
 
+  bool _isToolTipShown() => _isToolTipVisible;
+
   Future<void> _showTip() async {
-    if (_overlayEntry == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    print('Tip> showTip, _overlayEntry: $_overlayEntry, _isToolTipRendered: $_isToolTipRendered');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_overlayEntry == null) {
         _addTip();
-      });
-    } else if (_isToolTipRendered) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      } else if (_isToolTipRendered) {
         _overlayEntry?.markNeedsBuild();
-      });
-    }
+      }
+    });
   }
 
   Future<void> _addTip() async {
@@ -247,7 +248,7 @@ class _PostTipState extends State<PostTip> {
 
                             _offset = offset;
                             _isToolTipRendered = true;
-                            _isToolTipVisible = _controller.value == PostTipStatus.shown;
+                            _isToolTipVisible = true;
                             _opacity = _isToolTipVisible ? 1 : 0;
 
                             /// it is inevitable to render the overlay forcefully, because ToolTip's location is
@@ -273,19 +274,19 @@ class _PostTipState extends State<PostTip> {
     });
     _overlayEntry = overlayEntry;
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Overlay.maybeOf(context)?.insert(overlayEntry);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => Overlay.maybeOf(context)?.insert(overlayEntry));
   }
 
   Future<void> _hideTip() async {
-    if (_isToolTipRendered && _isToolTipVisible) {
-      _opacity = 0.0;
-      _isToolTipVisible = false;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    print(
+        'Tip> v, _isToolTipRendered: $_isToolTipRendered, _isToolTipVisible: $_isToolTipVisible, _opacity: $_opacity');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_isToolTipRendered && _isToolTipVisible) {
+        _opacity = 0.0;
+        _isToolTipVisible = false;
         _overlayEntry?.markNeedsBuild();
-      });
-    }
+      }
+    });
   }
 
   void _updateTip() {

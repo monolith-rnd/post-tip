@@ -5,36 +5,35 @@ enum PostTipStatus { shown, hidden }
 typedef ShowPostTipCallback = Future<void> Function();
 typedef HidePostTipCallback = Future<void> Function();
 
-class PostTipController extends ValueNotifier<PostTipStatus> {
-  ShowPostTipCallback? showTip;
-  HidePostTipCallback? hideTip;
+class PostTipController {
+  ShowPostTipCallback _showTip = () async {};
+  HidePostTipCallback _hideTip = () async {};
+  bool Function() _isShown = () => false;
 
-  PostTipController({PostTipStatus? value}) : super(value ?? PostTipStatus.shown) {
-    showTip = null;
-    hideTip = null;
+  PostTipController({PostTipStatus? value});
+
+  void attach({
+    required Future<void> Function() showTip,
+    required Future<void> Function() hideTip,
+    required bool Function() isShown,
+  }) {
+    _showTip = showTip;
+    _hideTip = hideTip;
+    _isShown = isShown;
   }
 
-  void attach({ShowPostTipCallback? showTip, HidePostTipCallback? hideTip}) {
-    this.showTip = showTip;
-    this.hideTip = hideTip;
-  }
-
-  bool get isShown => value == PostTipStatus.shown;
+  bool get isShown => _isShown();
 
   Future<void> show() async {
-    if (value == PostTipStatus.shown) return;
-
-    value = PostTipStatus.shown;
-    await showTip?.call();
-    notifyListeners();
+    if (!isShown) {
+      await _showTip();
+    }
   }
 
   Future<void> hide() async {
-    if (value == PostTipStatus.hidden) return;
-
-    value = PostTipStatus.hidden;
-    await hideTip?.call();
-    notifyListeners();
+    if (isShown) {
+      await _hideTip();
+    }
   }
 
   Future<void> toggle() async {
@@ -42,13 +41,6 @@ class PostTipController extends ValueNotifier<PostTipStatus> {
       await hide();
     } else {
       await show();
-    }
-  }
-
-  void notify(PostTipStatus status) {
-    if (value != status) {
-      value = status;
-      notifyListeners();
     }
   }
 }

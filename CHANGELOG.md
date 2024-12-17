@@ -1,3 +1,9 @@
+## 0.1.0
+
+### Bug Fixes
+
+* fixed illegal state of tooltip when the tooltip tapped rapidly in iOS.
+
 ## 0.0.6
 
 ### Bug Fixes
