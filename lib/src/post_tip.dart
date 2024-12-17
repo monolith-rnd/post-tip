@@ -165,7 +165,6 @@ class _PostTipState extends State<PostTip> {
   bool _isToolTipShown() => _isToolTipVisible;
 
   Future<void> _showTip() async {
-    print('Tip> showTip, _overlayEntry: $_overlayEntry, _isToolTipRendered: $_isToolTipRendered');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_overlayEntry == null) {
         _addTip();
@@ -278,8 +277,6 @@ class _PostTipState extends State<PostTip> {
   }
 
   Future<void> _hideTip() async {
-    print(
-        'Tip> v, _isToolTipRendered: $_isToolTipRendered, _isToolTipVisible: $_isToolTipVisible, _opacity: $_opacity');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_isToolTipRendered && _isToolTipVisible) {
         _opacity = 0.0;
