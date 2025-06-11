@@ -50,7 +50,5 @@ MaterialApp(
 ```
 
 ## Demo
-<video width="450" height="auto" controls autoplay>
-  <source src="https://github.com/monolith-rnd/post-tip/blob/main/art/demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+
+![PostTip Demo](https://github.com/monolith-rnd/post-tip/blob/main/art/demo.webp)
